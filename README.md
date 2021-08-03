@@ -1,6 +1,6 @@
 # react-notes
 
-#属性展开  ...传值运用
+# 属性展开  ...传值运用
 function App1() {
   return <Greeting firstName="Ben" lastName="Hector" />;
 }
