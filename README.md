@@ -363,3 +363,13 @@ import Input from '../../../modules/common/components/Input'
 // 👍 Absolute ones don't change
 import Input from '@modules/common/components/Input'
 ```
+
+### 14.包装额外的组件库
+```
+// 👎 Don't import directly
+import { Button } from 'semantic-ui-react'
+import DatePicker from 'react-datepicker'
+
+// 👍 Export the component and use it referencing your internal module
+import { Button, DatePicker } from '@modules/common/components'
+```
