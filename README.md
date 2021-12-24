@@ -163,7 +163,90 @@ function Filters({ onFilterClick }) {
   )
 }
 ```
+### 4.在JSX中写必要的注释，增加代码可读性
+```
+function Component(props) {
+  return (
+    <>
+      {/* If the user is subscribed we don't want to show them any ads */}
+      {user.subscribed ? null : <SubscriptionPlans />}
+    </>
+  )
+}
+```
+### 5.组件间传参时尽量进行对象参数解构
+```
+// 👎 Don't repeat props everywhere in your component
+function Input(props) {
+  return <input value={props.value} onChange={props.onChange} />
+}
 
-3.组件间传参时尽量进行参数解构
-3.控制是否渲染组件使用三元组判断，尽量不要用短路运算符&&（有出错的可能）
-4.
+// 👍 Destructure and use the values directly
+function Component({ value, onChange }) {
+  const [state, setState] = useState('')
+
+  return <div>...</div>
+}
+```
+### 6.传递对象，尽量避免传递元数据（如果后期对象增key，无需多处调整，减少维护成本）
+```
+// 👎 Don't pass values on by one if they're related
+<UserProfile
+  bio={user.bio}
+  name={user.name}
+  email={user.email}
+  subscription={user.subscription}
+/>
+
+// 👍 Use an object that holds all of them instead
+<UserProfile user={user} />
+```
+### 7.控制是否渲染组件使用三元组判断，尽量不要用短路运算符&&（条件不成立是有没有必要的渲染）
+```
+// 👎 Try to avoid short-circuit operators
+function Component() {
+  const count = 0
+
+  return <div>{count && <h1>Messages: {count}</h1>}</div>
+}
+
+// 👍 Use a ternary instead
+function Component() {
+  const count = 0
+
+  return <div>{count ? <h1>Messages: {count}</h1> : null}</div>
+}
+```
+### 8.避免嵌套三元运算符（可读性极差）
+```
+// 👎 Nested ternaries are hard to read in JSX
+isSubscribed ? (
+  <ArticleRecommendations />
+) : isRegistered ? (
+  <SubscribeCallToAction />
+) : (
+  <RegisterCallToAction />
+)
+
+// 👍 Place them inside a component on their own
+function CallToActionWidget({ subscribed, registered }) {
+  if (subscribed) {
+    return <ArticleRecommendations />
+  }
+
+  if (registered) {
+    return <SubscribeCallToAction />
+  }
+
+  return <RegisterCallToAction />
+}
+
+function Component() {
+  return (
+    <CallToActionWidget
+      subscribed={subscribed}
+      registered={registered}
+    />
+  )
+}
+```
