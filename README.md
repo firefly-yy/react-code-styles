@@ -355,14 +355,23 @@ function Component() {
 |   |   |   ├── ItemCard.jsx
 ```
 
-### 13.使用绝对路径
+### 13.使用绝对路径 
 ```
 // 👎 Don't use relative paths
 import Input from '../../../modules/common/components/Input'
 
 // 👍 Absolute ones don't change
-import Input from '@modules/common/components/Input'
+import Input from 'modules/common/components/Input'
 ```
+(使用方法： 在项目的根目录下创建jsconfig.json文件)
+  ```
+  {
+  "compilerOptions": {
+    "baseUrl": "src"
+  },
+  "include": ["src"]
+}
+  ```
 
 ### 14.包装额外的组件库
 ```
@@ -371,5 +380,5 @@ import { Button } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 
 // 👍 Export the component and use it referencing your internal module
-import { Button, DatePicker } from '@modules/common/components'
+import { Button, DatePicker } from 'modules/common/components'
 ```
