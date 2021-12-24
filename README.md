@@ -250,3 +250,116 @@ function Component() {
   )
 }
 ```
+
+### 9. 大量数据映射的时候将数据抽出成一个组件的形式，不要在div中map元素，这样可读性较差
+```
+// 👎 Don't write loops together with the rest of the markup
+function Component({ topic, page, articles, onNextPage }) {
+  return (
+    <div>
+      <h1>{topic}</h1>
+      {articles.map(article => (
+        <div>
+          <h3>{article.title}</h3>
+          <p>{article.teaser}</p>
+          <img src={article.image} />
+        </div>
+      ))}
+      <div>You are on page {page}</div>
+      <button onClick={onNextPage}>Next</button>
+    </div>
+  )
+}
+
+// 👍 Extract the list in its own component
+function Component({ topic, page, articles, onNextPage }) {
+  return (
+    <div>
+      <h1>{topic}</h1>
+      <ArticlesList articles={articles} />
+      <div>You are on page {page}</div>
+      <button onClick={onNextPage}>Next</button>
+    </div>
+  )
+}
+```
+
+### 10.组件传参进行对象解构时，对解构的key分配默认的对象值，减少组件间的跳转，便于直接阅读
+```
+// 👎 Don't define the default props outside of the function
+function Component({ title, tags, subscribed }) {
+  return <div>...</div>
+}
+
+Component.defaultProps = {
+  title: '',
+  tags: [],
+  subscribed: false,
+}
+
+// 👍 Place them in the arguments list
+function Component({ title = '', tags = [], subscribed = false }) {
+  return <div>...</div>
+}
+```
+
+### 11.避免嵌套定义及渲染组件，提高组件函数的可读性
+```
+// 👎 Don't write nested render functions
+function Component() {
+  function renderHeader() {
+    return <header>...</header>
+  }
+  return <div>{renderHeader()}</div>
+}
+
+// 👍 Extract it in its own component
+import Header from '@modules/common/components/Header'
+
+function Component() {
+  return (
+    <div>
+      <Header />
+    </div>
+  )
+}
+```
+
+### 12.文件目录解构
+```
+// 👎 Don't group by technical details
+├── containers
+|   ├── Dashboard.jsx
+|   ├── Details.jsx
+├── components
+|   ├── Table.jsx
+|   ├── Form.jsx
+|   ├── Button.jsx
+|   ├── Input.jsx
+|   ├── Sidebar.jsx
+|   ├── ItemCard.jsx
+
+// 👍 Group by module/domain
+├── modules
+|   ├── common
+|   |   ├── components
+|   |   |   ├── Button.jsx
+|   |   |   ├── Input.jsx
+|   ├── dashboard
+|   |   ├── components
+|   |   |   ├── Table.jsx
+|   |   |   ├── Sidebar.jsx
+|   ├── details
+|   |   ├── components
+|   |   |   ├── Form.jsx
+|   |   |   ├── ItemCard.jsx
+```
+
+### 13.使用绝对路径
+```
+// 👎 Don't use relative paths
+import Input from '../../../modules/common/components/Input'
+
+// 👍 Absolute ones don't change
+import Input from '@modules/common/components/Input'
+```
